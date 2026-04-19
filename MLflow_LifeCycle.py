@@ -8,7 +8,7 @@ import pandas as pd
 from mlflow.models.signature import infer_signature
 from mlflow.tracking import MlflowClient
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("MLflow")
 
 
 class TicketPriceModelWrapper(mlflow.pyfunc.PythonModel):
@@ -138,19 +138,19 @@ def run_mlflow_lifecycle(training_results, X_train, X):
                 stage="Production",
                 archive_existing_versions=True
             )
-            status = "Production 🚀"
-            logger.info(f"🚀 Model Promoted! Metrics: R2={r2:.2%}, RMSLE={rmsle:.4f}")
+            status = "Production "
+            logger.info(f" Model Promoted! Metrics: R2={r2:.2%}, RMSLE={rmsle:.4f}")
             if abs(test_mae - cv_mae) > (0.2 * cv_mae):
                 logger.warning(
                     f"Significant gap between CV MAE ({cv_mae:.2f}) and Test MAE ({test_mae:.2f}). Model might be overfitting.")
 
         else:
-            status = "Staging 🛑 (Quality Gate Failed)"
-            logger.error(f"⚠️ Quality Gate Failed. Status: Staging. (Required: R2>0.85, Current: {r2:.2f})")
+            status = "Staging  (Quality Gate Failed)"
+            logger.error(f" Quality Gate Failed. Status: Staging. (Required: R2>0.85, Current: {r2:.2f})")
 
-        logger.info(f"📦 Model Version: {model_version}")
-        logger.info(f"🏷️ Final Status: {status}")
-        logger.info(f"🆔 Run ID: {run_id}")
+        logger.info(f" Model Version: {model_version}")
+        logger.info(f" Final Status: {status}")
+        logger.info(f" Run ID: {run_id}")
         logger.info("=" * 50)
 
         return run_id
