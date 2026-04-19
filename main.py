@@ -9,7 +9,7 @@ import logging
 from logger_config import setup_logging
 setup_logging()
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("Main)
 def main():
     parser = argparse.ArgumentParser(description="Flight Ticket Price Prediction Pipeline")
 
@@ -24,17 +24,17 @@ def main():
     args = parser.parse_args()
 
     print("\n" + "=" * 60)
-    logger.info("🚀 Flight Ticket Price Prediction System is Starting...")
+    logger.info(" Flight Ticket Price Prediction System is Starting...")
     print("=" * 60)
 
     logger.info("\nStep 1: Cleaning and Preprocessing Data...")
 
     if not os.path.exists(args.data_path):
-        print(f"❌ Error: File not found at {args.data_path}")
+        print(f" Error: File not found at {args.data_path}")
         return
 
     df_cleaned = data.run_data_pipeline(args.data_path)
-    logger.info(f"✅ Data processed successfully. Shape: {df_cleaned.shape}")
+    logger.info(f" Data processed successfully. Shape: {df_cleaned.shape}")
 
     logger.info("\nStep 1.5: Exploratory Data Analysis (EDA & Visualization)...")
     eda_visualization.run_eda(df_cleaned)
@@ -46,7 +46,7 @@ def main():
         max_depth=args.max_depth,
         learning_rate=args.learning_rate
     )
-    logger.info("✅ Model training and evaluation completed.")
+    logger.info(" Model training and evaluation completed.")
 
     logger.info("\nStep 3: Managing MLflow Lifecycle (Logging & Registry)...")
 
@@ -60,8 +60,8 @@ def main():
     )
 
     logger.info("\n" + "=" * 60)
-    logger.info(f"🎉 Pipeline Execution Finished Successfully!")
-    logger.info(f"🆔 Run ID: {run_id}")
+    logger.info(f" Pipeline Execution Finished Successfully!")
+    logger.info(f" Run ID: {run_id}")
     logger.info("=" * 60 + "\n")
 
 
