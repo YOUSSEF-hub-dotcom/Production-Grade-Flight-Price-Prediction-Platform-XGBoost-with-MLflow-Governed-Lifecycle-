@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("Data")
 
 
 def run_data_pipeline(file_path):
