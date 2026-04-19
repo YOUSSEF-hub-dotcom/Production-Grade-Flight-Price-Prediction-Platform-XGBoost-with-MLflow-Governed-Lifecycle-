@@ -60,7 +60,7 @@ def get_smart_identifier(request: Request):
 
 limiter = Limiter(key_func=get_smart_identifier)
 
-app = FastAPI(title="✈️ Advanced Ticket Price API")
+app = FastAPI(title=" Advanced Ticket Price API")
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
@@ -163,9 +163,9 @@ def log_to_db(data: dict, price: float):
         )
         db.add(new_entry)
         db.commit()
-        logger.info(f"✅ History Saved: {data['Airline']} | {data['Source']}->{data['Destination']} | Price: {price}")
+        logger.info(f" History Saved: {data['Airline']} | {data['Source']}->{data['Destination']} | Price: {price}")
     except Exception as e:
-        logger.error(f"❌ Database Logging Failed: {str(e)}", exc_info=True)
+        logger.error(f" Database Logging Failed: {str(e)}", exc_info=True)
     finally:
         db.close()
 
