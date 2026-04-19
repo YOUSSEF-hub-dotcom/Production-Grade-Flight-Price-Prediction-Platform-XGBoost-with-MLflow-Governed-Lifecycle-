@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("EDA")
 
 def run_eda(df):
     logger.info("=========== EDA & Visualization ==========")
