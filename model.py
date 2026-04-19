@@ -9,7 +9,7 @@ from sklearn.preprocessing import OneHotEncoder,LabelEncoder
 from xgboost import XGBRegressor
 from sklearn.metrics import mean_squared_log_error, mean_absolute_error, r2_score
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("Model")
 
 def train_model(df, n_estimators, max_depth, learning_rate):
 
@@ -102,7 +102,7 @@ def train_model(df, n_estimators, max_depth, learning_rate):
     r2 = r2_score(y_test, y_pred_log)
 
     logger.info("-" * 40)
-    logger.info(f"🚀 FINAL EVALUATION WITH RMSLE")
+    logger.info(f" FINAL EVALUATION WITH RMSLE")
     logger.info("-" * 40)
     logger.info(f"RMSLE: {rmsle:.4f}")
     logger.info(f"MAE (Actual Price): {mae:.2f} Units")
