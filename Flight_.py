@@ -547,7 +547,7 @@ mae = mean_absolute_error(y_test_original, y_pred_original)
 r2 = r2_score(y_test, y_pred_log)
 
 print("-" * 40)
-print(f"🚀 FINAL EVALUATION WITH RMSLE")
+print(f" FINAL EVALUATION WITH RMSLE")
 print("-" * 40)
 print(f"RMSLE: {rmsle:.4f}")
 print(f"MAE (Actual Price): {mae:.2f} Units")
@@ -590,7 +590,7 @@ from mlflow.tracking import MlflowClient
 cv_mae_mean = -cv_results.mean()
 cv_mae_std = cv_results.std()
 # =========================================================
-# 9️⃣ MLflow Wrapper (Production Grade)
+#  MLflow Wrapper (Production Grade)
 # =========================================================
 
 class TicketPriceModelWrapper(mlflow.pyfunc.PythonModel):
@@ -614,7 +614,7 @@ class TicketPriceModelWrapper(mlflow.pyfunc.PythonModel):
         return np.expm1(log_preds)
 
 # =========================================================
-# 🔟 MLflow Lifecycle
+#  MLflow Lifecycle
 # =========================================================
 
 mlflow.set_experiment("Ticket_Price_Prediction_Full_Lifecycle")
@@ -702,9 +702,9 @@ with mlflow.start_run(run_name="XGB_Full_Lifecycle") as run:
             stage="Production",
             archive_existing_versions=True
         )
-        print("🚀 Model promoted to PRODUCTION")
+        print(" Model promoted to PRODUCTION")
     else:
-        print("❌ Model did not meet production criteria")
+        print(" Model did not meet production criteria")
 
 # =========================================================
 # END
