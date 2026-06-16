@@ -21,7 +21,53 @@ def train_model(df, n_estimators, max_depth, learning_rate):
     'is_weekend', 'Path', 'Dep_Session', 'Is_Long_Flight',
     'is_peak_season']
     """
+    # Starting Target (Price) Skew & Outlier Treatment
+    logger.info("=========== Starting Target (Price) Skew & Outlier Treatment ==========")
 
+    # 1. Price Skew Analysis Before Treatment
+    skew_value = df['Price'].skew()
+    logger.info(f"Skew Value of Price Before Treatment: {skew_value:.4f}")
+
+    sns.histplot(df['Price'], kde=True)
+    plt.title("Distribution of Price Before Treatment Skew")
+    plt.show()
+
+    # 2. Log Transformation (log1p) to handle Right-Skewed target
+    logger.info("Applying Log Transformation to Price...")
+    df['Price'] = np.log1p(df['Price'])
+
+    treat_skew_price = df['Price'].skew()
+    logger.info(f"Treatment Skew of Price (After Log): {treat_skew_price:.4f}")
+    
+    sns.histplot(df['Price'], kde=True)
+    plt.title("Distribution of Price After Treatment Skew (Log Transformation)")
+    plt.show()
+
+    # 3. Price Outlier Detection using IQR Method
+    print(df['Price'].describe())
+
+    Q1 = df['Price'].quantile(0.25)
+    Q3 = df['Price'].quantile(0.75)
+    IQR = Q3 - Q1
+    Lower = Q1 - 1.5 * IQR
+    Upper = Q3 + 1.5 * IQR
+
+    outliers = df[(df['Price'] < Lower) | (df['Price'] > Upper)]
+    logger.info(f"Outliers Detected: {len(outliers)} rows")
+    logger.info(f"Percentage of Outliers: {(len(outliers) / len(df) * 100):.4f} %")
+
+    sns.boxplot(x=df['Price'], color='blue')
+    plt.title("BoxPlot to detect outlier in Price")
+    plt.show()
+
+    # 4. Remove Outliers from the Dataset
+    logger.info("Removing Target outliers from dataset...")
+    df = df[(df['Price'] >= Lower) & (df['Price'] <= Upper)]
+    print(f"New Dataset shape post outlier removal: {df.shape}")
+    
+    logger.info("=========== Target Preprocessing Completed ==========")
+
+    # Feature Selection 
     categorical_features = ['Airline', 'Source', 'Destination', 'Dep_Session']
     numeric_features = ['Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins',
                         'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week',
