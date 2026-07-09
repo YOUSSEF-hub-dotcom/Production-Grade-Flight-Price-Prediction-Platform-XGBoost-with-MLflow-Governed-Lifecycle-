@@ -100,35 +100,38 @@ def run_data_pipeline(file_path):
     # ====================================================
     logger.info("=========== STEP 3: Check Skew & Outliers ==========")
     
-    # 1. Target Skewness Analysis
-    skew_value = df['Price'].skew()
-    logger.info(f"Baseline Skew Value of Price: {skew_value:.4f}")
-    
-    plt.figure(figsize=(8,5))
-    sns.histplot(df['Price'], kde=True, color='blue')
-    plt.title("Distribution of Price (Baseline Skew)")
-    plt.xlabel("Price")
-    plt.ylabel("Frequency")
-    plt.show()
-    plt.close()
-    
-    # 2. Outlier Detection via Interquartile Range (IQR)
-    Q1 = df['Price'].quantile(0.25)
-    Q3 = df['Price'].quantile(0.75)
-    IQR = Q3 - Q1
-    lower_bound = Q1 - 1.5 * IQR
-    upper_bound = Q3 + 1.5 * IQR
-    
-    outliers = df[(df['Price'] < lower_bound) | (df['Price'] > upper_bound)]
-    logger.info(f"Outliers Detected via IQR: {len(outliers)} rows")
-    logger.info(f"Percentage of Outliers: {(len(outliers) / len(df) * 100):.4f} %")
-    
-    plt.figure(figsize=(8,4))
-    sns.boxplot(x=df['Price'], color='red')
-    plt.title("BoxPlot for Outlier Detection in Price")
-    plt.xlabel("Price")
-    plt.show()
-    plt.close()
+    if 'Price' in df.columns:
+        # 1. Target Skewness Analysis
+        skew_value = df['Price'].skew()
+        logger.info(f"Baseline Skew Value of Price: {skew_value:.4f}")
+        
+        plt.figure(figsize=(8,5))
+        sns.histplot(df['Price'], kde=True, color='blue')
+        plt.title("Distribution of Price (Baseline Skew)")
+        plt.xlabel("Price")
+        plt.ylabel("Frequency")
+        plt.show()
+        plt.close()
+        
+        # 2. Outlier Detection via Interquartile Range (IQR)
+        Q1 = df['Price'].quantile(0.25)
+        Q3 = df['Price'].quantile(0.75)
+        IQR = Q3 - Q1
+        lower_bound = Q1 - 1.5 * IQR
+        upper_bound = Q3 + 1.5 * IQR
+        
+        outliers = df[(df['Price'] < lower_bound) | (df['Price'] > upper_bound)]
+        logger.info(f"Outliers Detected via IQR: {len(outliers)} rows")
+        logger.info(f"Percentage of Outliers: {(len(outliers) / len(df) * 100):.4f} %")
+        
+        plt.figure(figsize=(8,4))
+        sns.boxplot(x=df['Price'], color='red')
+        plt.title("BoxPlot for Outlier Detection in Price")
+        plt.xlabel("Price")
+        plt.show()
+        plt.close()
+    else:
+        logger.warning("Target column 'Price' not found. Skipping Skew & Outlier Check.")
 
 
     # ====================================================
@@ -146,7 +149,7 @@ def run_data_pipeline(file_path):
         print("Year column ignored because it has only one value.")
 
     # Drop the original date column after extraction
-    df.drop("Date_of_Journey", axis=1, inplace=True)
+    df.drop("Date_of_Journey", axis=1, inplace=True, errors='ignore')
 
     # Build advanced binary, categorical, and interaction features
     df['is_weekend'] = df['Day_of_Week'].apply(lambda x: 1 if x >= 4 else 0)
