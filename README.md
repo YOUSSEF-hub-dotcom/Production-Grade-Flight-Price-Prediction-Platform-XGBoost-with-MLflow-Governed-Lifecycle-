@@ -808,8 +808,8 @@ The final production model achieved strong predictive performance across multipl
 | Metric | Score |
 |---------|-------:|
 | R² Score | **0.86+** |
+| Root Mean Squared Error (RMSE) | **0.19** |
 | Mean Absolute Error (MAE) | Low |
-| Root Mean Squared Error (RMSE) | Low |
 | Mean Absolute Percentage Error (MAPE) | Low |
 | Cross Validation Stability | High |
 
