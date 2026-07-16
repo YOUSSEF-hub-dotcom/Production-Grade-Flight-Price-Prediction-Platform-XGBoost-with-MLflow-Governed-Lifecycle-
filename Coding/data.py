@@ -12,7 +12,7 @@ def run_data_pipeline(file_path):
     Executes tasks in the following strict architectural pipeline:
     1. Quick Data Inspection
     2. Basic Data Cleaning
-    3. Check Skew & Outliers
+    3. Check Skew & Outliers (Including Correlation Analysis)
     4. Feature Engineering
     """
     logger.info("Loading Dataset ....")
@@ -96,7 +96,7 @@ def run_data_pipeline(file_path):
 
 
     # ====================================================
-    # STEP 3: Check Skew & Outliers
+    # STEP 3: Check Skew & Outliers (Including Correlation)
     # ====================================================
     logger.info("=========== STEP 3: Check Skew & Outliers ==========")
     
@@ -130,8 +130,25 @@ def run_data_pipeline(file_path):
         plt.xlabel("Price")
         plt.show()
         plt.close()
+
+        # 3. Correlation Analysis (Pearson Correlation for Linear Relations)
+        logger.info("Executing Pearson Correlation Analysis...")
+        # تحديد الأعمدة الرقمية الحالية لحساب الارتباط مع السعر
+        numerical_cols = ['Price', 'Duration_mins', 'Total_Stops', 'Dep_hour', 'Dep_minute', 'Arrival_hour', 'Arrival_minute']
+        existing_num_cols = [col for col in numerical_cols if col in df.columns]
+        
+        pearson_corr = df[existing_num_cols].corr(method='pearson')
+        logger.info("\nPearson Correlation Matrix:\n%s", str(pearson_corr))
+
+        plt.figure(figsize=(10, 8))
+        sns.heatmap(pearson_corr, annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
+        plt.title("Pearson Correlation Heatmap (Numerical Features & Price)")
+        plt.tight_layout()
+        plt.show()
+        plt.close()
+        
     else:
-        logger.warning("Target column 'Price' not found. Skipping Skew & Outlier Check.")
+        logger.warning("Target column 'Price' not found. Skipping Skew, Outlier, and Correlation Check.")
 
 
     # ====================================================
