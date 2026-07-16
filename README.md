@@ -855,21 +855,86 @@ This analysis highlights potential areas for future model improvements.
 
 # 🧠 Model Explainability
 
-Interpretability is essential for business adoption.
+Understanding **why** a prediction is made is just as important as achieving high predictive accuracy.
 
-Feature importance analysis was performed to understand which variables contribute most to ticket price prediction.
+To move beyond a predictive "black box", the final XGBoost model was analyzed using its built-in **Feature Importance** mechanism, allowing us to identify the variables that contribute most to airline ticket pricing decisions.
 
-The most influential features include:
+---
 
-- Airline
-- Route
-- Flight Duration
-- Total Stops
-- Journey Month
-- Departure Time
+### 🌲 XGBoost Feature Importance & Business Actionability
 
-Understanding feature importance enables stakeholders to trust the model's predictions and derive meaningful business insights.
+To transition our regression model from a predictive **black box** into a strategic decision-support tool for revenue managers, we extracted the built-in **Feature Importance** scores from the trained XGBoost model.
 
+These importance scores reveal which flight characteristics most strongly influence the tree-splitting process, providing valuable insight into the business logic learned by the model.
+
+```python
+# Extract feature importance from the trained XGBoost model
+
+import pandas as pd
+
+importances = model.feature_importances_
+
+feature_imp = pd.DataFrame({
+    "Feature": X_train.columns,
+    "Importance": importances
+})
+
+feature_imp.sort_values(by="Importance", ascending=False)
+```
+
+---
+
+## 💡 Strategic Revenue Insights & Actionable Takeaways
+
+### ✈️ Route & Airline Dominance (The "Who & Where")
+
+The combined **Route** and operating **Airline** received the highest feature importance scores, indicating that market competition and route demand are the primary drivers of ticket pricing.
+
+**Business Action**
+
+- Benchmark prices against competitors on high-demand routes.
+- Optimize pricing by route rather than applying global pricing rules.
+- Support market-share growth without triggering unnecessary price wars.
+
+---
+
+### 🛑 Total Stops as a Price Multiplier
+
+The number of flight stops emerged as one of the strongest pricing determinants.
+
+Passengers consistently place a premium on shorter travel times and direct flights.
+
+**Business Action**
+
+- Automatically increase pricing for non-stop flights during business travel hours.
+- Offer targeted discounts on multi-stop itineraries to improve seat occupancy.
+- Design differentiated pricing strategies based on customer willingness to pay.
+
+---
+
+### 🌅 Departure Session (Time-of-Day Effect)
+
+The engineered **Dep_Session** feature demonstrated substantial predictive power.
+
+Morning and evening departures generally command higher fares due to stronger business-travel demand.
+
+**Business Action**
+
+- Introduce flash sales during lower-demand periods such as Night or Late Afternoon.
+- Optimize aircraft utilization by stimulating demand in underperforming time windows.
+- Improve revenue through session-specific pricing strategies.
+
+---
+
+### 🎯 Business Value
+
+Rather than serving solely as an interpretation technique, Feature Importance transforms the model into a practical decision-support system by helping stakeholders:
+
+- Understand the primary drivers behind airline ticket pricing.
+- Build trust in machine learning predictions.
+- Design data-driven dynamic pricing strategies.
+- Improve revenue optimization across routes and flight schedules.
+- Support strategic planning for airline revenue management.
 ---
 
 # 🏷️ Model Card
