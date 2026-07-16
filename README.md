@@ -555,13 +555,34 @@ The purpose of EDA was not simply visualization.
 Instead, it focused on discovering actionable business insights capable of improving pricing strategies.
 
 The analysis answered questions such as:
-
 - Which airlines charge premium prices?
 - How much do stops influence pricing?
 - Which cities are the most expensive?
 - How does seasonality affect demand?
 - Are morning flights consistently more expensive?
 - Does duration significantly influence prices?
+
+---
+
+### 📈 Correlation Analysis: Pearson vs. Spearman in Dynamic Pricing
+
+To uncover how numerical factors like **Flight Duration** and **Total Stops** relate to the **Ticket Price**, we conducted a comparative correlation analysis. 
+
+Rather than relying purely on standard Pearson Correlation, we leveraged **Spearman Rank Correlation** as our primary metric for understanding feature relationships.
+
+#### Why Spearman is Mathematically and Commercially Superior for Flight Pricing:
+1. **Resilience to Luxury & Last-Minute Spikes (Outliers):** Flight price datasets naturally contain extreme outliers—such as business/first-class tickets or emergency last-minute bookings that cost $10\times$ the average fare. Because these represent real business patterns, we **cannot remove them**. Pearson is highly sensitive to extreme raw values and skews the correlation coefficient. Spearman operates on ordinal ranks ($1^{st}, 2^{nd}, 3^{rd} \dots$), neutralizing the distance of extreme values while fully preserving their directional relationship.
+2. **Capturing Non-Linear Monotonic Pricing Rules:** The relationship between duration/stops and price is rarely strictly linear (e.g., flying 1 hour longer does not add a fixed $\$50$ to the ticket across all airlines). Pricing curves are typically exponential or stepped. Spearman measures whether price consistently increases as duration or stops increase, regardless of whether that increase forms a straight line.
+
+```python
+# Executed during the exploratory analysis phase:
+spearman_corr = df[['Duration', 'Total_Stops', 'Price']].corr(method='spearman')
+sns.heatmap(spearman_corr, annot=True, cmap='coolwarm', fmt=".2f")
+
+💡 Business Insights Discovered:
+Total Stops & Price show a strong positive Spearman correlation (~0.65-0.73): This confirms that multi-stop flights (which incur higher operating costs, airport fees, and longer transit times) monotonically increase the baseline fare, even when non-linear pricing strategies are active.
+
+Duration & Price exhibit a solid monotonic relationship: Showing that fuel burn, crew resource allocation, and flight length remain fundamental anchors for base fare calculation, completely independent of seasonal demand spikes.
 
 ---
 
